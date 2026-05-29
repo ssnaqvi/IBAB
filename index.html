@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Landing Page</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    color: white;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Static Header Bars */
+  .bismillah-header {
+    font-family: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', serif;
+    font-size: 120%;
+    font-weight: normal;
+    line-height: 1.8;
+    position: fixed;
+    left: 0;
+    width: 100%;
+    background: darkgreen;
+    padding: 12px 0;
+    text-align: center;
+    color: white;
+    text-shadow: 0 0 5px #000;
+    border-bottom: 2px solid white;
+    z-index: 1000;
+  }
+  .bismillah-header:nth-of-type(1) { top: 0; }
+  .bismillah-header:nth-of-type(2) { top: 50px; }
+  .bismillah-header:nth-of-type(3) { top: 100px; }
+
+  /* Photo Slideshow Panel */
+.photo-panel {
+  position: absolute;
+  top: 30px; /* sits below headers */
+  left: 20px;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 30px;
+  border-radius: 22px;
+  width:400px;       /* fixed width */
+  height: 300px;      /* fixed height */
+  text-align: center;
+  color: #ffcc00;
+}
+
+.slideshow-container {
+  position: relative;
+  width: 80%;
+  height: 80%;       /* matches panel height */
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;        /* fill container width */
+  height: 100%;       /* fill container height */
+  object-fit: cover;  /* crop/scale to fit neatly */
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.slide.active {
+  opacity: 1;
+  position: relative;
+}
+
+
+  /* Responsive adjustments */
+  @media (max-width: 600px) {
+    .photo-panel {
+      position: static;
+      width: 90%;
+      margin: 20px auto;
+    }
+  }
+
+  /* Header info (calendar + time) */
+  .header-info {
+    position: fixed;
+    top: 0;
+    left: 10px;
+    z-index: 1200;
+    font-size: 0.9em;
+    text-align: left;
+    color: #ffcc00;
+    font-weight: bold;
+    background: rgba(0,0,0,0.5);
+    padding: 5px 10px;
+    border-radius: 6px;
+  }
+
+  /* Background image aligned fully */
+  .background {
+    margin-top: 150px;
+    height: calc(100vh - 150px);
+    background: url('5.jpg') no-repeat center center fixed;
+    background-size: contain;
+    background-color: black;
+  }
+
+  /* Logo enlarged, animated */
+  .logo-top {
+    position: fixed;
+    top: 0;
+    right: 5%;
+    height: 150px;
+    z-index: 1100;
+    animation: pulseLogo 3s infinite;
+  }
+  .logo-top img {
+    height: 100%;
+    width: auto;
+  }
+  @keyframes pulseLogo {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+
+  /* Event panels on right */
+  .events {
+    position: absolute;
+    top: 40px;
+    right: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+  }
+  .event-panel {
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 15px;
+    border-radius: 10px;
+    width: 200px;
+    max-width: 90%;
+  }
+  .event-panel h2 {
+    margin: 0 0 5px;
+    font-size: 1.2em;
+    color: #ffcc00;
+  }
+  .event-panel p {
+    margin: 0;
+    font-size: 0.9em;
+    color: #fff;
+  }
+
+  /* Social Media */
+  .social-media {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .social-media a {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    background: #000;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 50px;
+    color: white;
+    font-size: 22px;
+    transition: transform 0.3s ease, background 0.3s ease;
+  }
+  .social-media a:hover {
+    transform: scale(1.15);
+    background: #ff0000;
+  }
+  .tooltip {
+    visibility: hidden;
+    width: 100px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 0.8em;
+  }
+  .social-media a:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  /* Visitor Counter */
+  .visitor-counter {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(0,0,0,0.6);
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 1.2em;
+    color: #00ffcc;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    display: flex;
+    gap: 5px;
+  }
+  .digit {
+    background: #000;
+    color: #0f0;
+    padding: 5px 8px;
+    border-radius: 4px;
+    box-shadow: 0 0 5px #0f0;
+    transition: transform 0.2s ease;
+  }
+  .digit.animate {
+    transform: scale(1.3);
+  }
+</style>
+</head>
+<body>
+  <!-- Static Header Bars -->
+  <div class="bismillah-header">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
+  <div class="bismillah-header">ٱللّٰهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ</div>
+  <div class="bismillah-header">السَّلامُ عَلى الحُسَيْنِ وَعَلى عَلِيِّ بْنِ الحُسَيْنِ وَعَلى أَوْلادِ الحُسَيْنِ وَعَلى أَصْحابِ الحُسَيْنِ</div>
+
+  <!-- Header info (Calendar + Time) -->
+  <div class="header-info" id="headerInfo">Loading time & calendar...</div>
+
+  <!-- Logo enlarged, animated -->
+  <div class="logo-top">
+    <img src="Imam Bargah Logo.png" alt="Imam Bargah Logo">
+  </div>
+
+  <!-- Background -->
+  <div class="background" role="img" aria-label="Decorative background"></div>
+
+  <!-- Photo Slideshow Panel -->
+  <div class="photo-panel">
+    <h2>Photo Gallery</h2>
+    <div class="slideshow-container">
+      <img src="01.jpg" class="slide active" alt="Photo 1">
+      <img src="02.jpg" class="slide" alt="Photo 2">
+      <img src="03.jpg" class="slide" alt="Photo 3">
+      <img src="04.jpg" class="slide" alt="Photo 4">
+      <img src="05.jpg" class="slide" alt="Photo 5">
+      <img src="06.jpg" class="slide" alt="Photo 6">
+      <img src="07.jpg" class="slide" alt="Photo 7">
+      <img src="08.jpg" class="slide" alt="Photo 8">
+      <img src="09.jpg" class="slide" alt="Photo 9">
+      <img src="10.jpg" class="slide" alt="Photo 10">
+      <img src="11.jpg" class="slide" alt="Photo 11">
+      <img src="12.jpg" class="slide" alt="Photo 12">
+      <img src="13.jpg" class="slide" alt="Photo 13">
+      <img src="14.jpg" class="slide" alt="Photo 14">
+    </div>
+  </div>
+
+  <!-- Event Panels (RIGHT SIDE) -->
+  <div class="events">
+    <div class="event-panel">
+      <h2>Muharram 2026</h2>
+      <p>Muharram 2026 starts on the evening of Tuesday, June 16th, 2026</p>
+    </div>
+    <div class="event-panel">
+      <h2> Ashra e Muharram (1st Till 11th Muharram -2026) </h2>
+      <p>Allama Najaf Ali Abidi From Karachi</p>
+    </div>
+    <div class="event-panel">
+      <h2> Majlis e Sham e Ghareeban</h2>
+      <p>8 P.M. Insha Allah</p>
+    </div>
+  </div>
+
+
+  <!-- Social Media -->
+  <div class="social-media">
+    <a href="https://www.facebook.com/ImamBargahAdilBaig" target="_blank" aria-label="Facebook">
+      <i class="fab fa-facebook-f"></i>
+      <div class="tooltip">Facebook</div>
+    </a>
+    <a href="https://www.instagram.com/imambargahadilbaig" target="_blank" aria-label="Instagram">
+      <i class="fab fa-instagram"></i>
+      <div class="tooltip">Instagram</div>
+    </a>
+    <a href="https://www.tiktok.com/@imambargahadilbaig" target="_blank" aria-label="TikTok">
+      <i class="fab fa-tiktok"></i>
+      <div class="tooltip">TikTok</div>
+    </a>
+     <a href="https://www.youtube.com/@imambargahadilbaig" target="_blank" aria-label="YouTube">
+      <i class="fab fa-youtube"></i>
+      <div class="tooltip">YouTube</div>
+    </a>
+    <a href="https://www.twitter.com" target="_blank" aria-label="Twitter">
+      <i class="fab fa-twitter"></i>
+      <div class="tooltip">Twitter</div>
+    </a>
+    <a href="mailto:imambargahadilbaig@gmail.com">
+      <i class="fas fa-envelope"></i>
+      <div class="tooltip">Email</div>
+    </a>
+  </div>
+
+  <!-- Visitor Counter -->
+  <div class="visitor-counter" id="visitorCounter"></div>
+
+<script>
+  // Digital incremental counter with animation
+  let count = localStorage.getItem('visitorCount') || 0;
+  count++;
+  localStorage.setItem('visitorCount', count);
+
+  const counterDiv = document.getElementById('visitorCounter');
+  counterDiv.innerHTML = '';
+  const digits = count.toString().split('');
+  digits.forEach(d => {
+    const span = document.createElement('span');
+    span.className = 'digit';
+    span.textContent = d;
+    counterDiv.appendChild(span);
+    // Animate each digit briefly
+    setTimeout(() => {
+      span.classList.add('animate');
+      setTimeout(() => span.classList.remove('animate'), 300);
+    }, 100);
+  });
+
+
+  // Live time and date in header with Hijri calendar
+  function updateHeaderInfo() {
+    const now = new Date();
+
+    // Gregorian date
+    const optionsGregorian = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const dateStr = now.toLocaleDateString('en-US', optionsGregorian);
+    const timeStr = now.toLocaleTimeString('en-US');
+
+    // Hijri date (Islamic calendar)
+    const optionsHijri = { day: 'numeric', month: 'long', year: 'numeric', calendar: 'islamic' };
+    const hijriDateStr = new Intl.DateTimeFormat('en-TN-u-ca-islamic', optionsHijri).format(now);
+
+    // Update header
+    document.getElementById('headerInfo').textContent = 
+      dateStr + ' | ' + timeStr + ' | Hijri: ' + hijriDateStr;
+  }
+
+  updateHeaderInfo();
+  setInterval(updateHeaderInfo, 1000);
+</script>
+<script>
+  // Slideshow logic
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('.slide');
+
+  function showSlide(index) {
+    slides.forEach((slide, i) => {
+      slide.classList.remove('active');
+      if (i === index) slide.classList.add('active');
+    });
+  }
+
+  function nextSlide() {
+    currentSlide = (currentSlide + 1) % slides.length;
+    showSlide(currentSlide);
+  }
+
+  // Start slideshow
+  setInterval(nextSlide, 3000); // change every 3 seconds
+  showSlide(currentSlide);
+</script>
+
